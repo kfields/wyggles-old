@@ -2,6 +2,7 @@
 import math
  
 from wyggles.sprite.sprite import Sprite
+from wyggles.sprite.engine import *
 from wyggles.sprite.body import *
 
 class Box(Sprite):
@@ -13,7 +14,7 @@ class Box(Sprite):
         self.createSprite(self.name, self.type)
         #
         self.body = BoxBody(self)
-        self.body.setSize(64,64,50)
+        self.body.setSize(64,64,1000)
         spriteEngine.addBody(self.body)
 
     def receiveKick(self, angle, distance):

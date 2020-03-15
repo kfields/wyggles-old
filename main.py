@@ -7,6 +7,7 @@ import data
 import math
 from random import random
 
+import pyglet
 from pyglet.gl import *
 from pyglet import clock
 from pyglet import font
@@ -50,7 +51,7 @@ def spawnWalls():
 #Balls
 def spawnBall(layer):
     ball = Ball(layer)
-    ball.materializeAt(random() * (worldMaxX - 100), random() * (worldMaxY - 100))        
+    ball.materializeAt(random() * (worldMaxX - 100), random() * (worldMaxY - 100)) 
 
 def spawnBalls(layer):
     i = 0
@@ -60,9 +61,9 @@ def spawnBalls(layer):
 #Boxes
 def spawnBox(layer):
     box = Box(layer)
-    box.materializeAt(Math.random() * (worldMaxX - 100), Math.random() * (worldMaxY - 100))
+    box.materializeAt(random() * (worldMaxX - 100), random() * (worldMaxY - 100))
 
-def spawnBoxes():
+def spawnBoxes(layer):
     total = 10
     i = 0
     while(i < total):
@@ -89,10 +90,7 @@ def spawnWyggles(root):
 
 #
 def main():
-    #spriteConsole = new Wyggles.Console() ;
-    #worldMaxX = document.documentElement.clientWidth - 1
     worldMaxX = 640
-    #worldMaxY = document.documentElement.clientHeight - 1
     worldMaxY = 480
     win = window.Window(worldMaxX, worldMaxY, caption='Wyggles')
     #
@@ -113,20 +111,37 @@ def main():
     win.on_key_press = on_key_press
     #
     spawnWalls()
-    #fixme:boxes need to be spawned before balls.  why?
     root = spriteEngine.get_root()
+    #line intersection isn't cutting it
     #spawnBoxes(root) ;
     spawnBalls(root) ;
     #spawnApple(root) ;
     spawnApple() ;
     spawnWyggles(root) ;
     intervalTime = 10
-    #var intervalTime = 1
-    #spriteEngineInterval = window.setInterval("spriteEngine_step() ;", intervalTime)
     imgName = "grass"
     imgSrc = data.filepath(imgName + ".png")
     element = image.load(imgSrc)
 
+    def update(dt):
+        #
+        win.clear()
+        #
+        #element.blit(0, 0, 0)
+        blitY = 0
+        while(blitY < worldMaxY):
+            blitX = 0            
+            while(blitX < worldMaxX):    
+                element.blit(blitX, blitY, 0)
+                blitX = blitX + element.width
+            blitY = blitY + element.height
+        #
+        spriteEngine.step(dt)
+        win.flip()
+
+    pyglet.clock.schedule_interval(update, .01)
+    pyglet.app.run()
+    '''
     while not win.has_exit:
         win.dispatch_events()   
         # Update
@@ -145,6 +160,7 @@ def main():
         #
         spriteEngine.step(dt)
         win.flip()
+    '''
 
-    
+
 main()

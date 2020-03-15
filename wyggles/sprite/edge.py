@@ -56,8 +56,12 @@ class Edge():
         D = a1y - a2y
         E = b1y - a1y
         F = b2y - a2y
-        
+
+        if F == 0:
+            return False
+
         s = (A + B*D/F) / (C - B * E / F)
+            
         if ( (s < 0.0) or (s > 1.0) ):
             return False
         
